@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Point Logistics — Panel Courier</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #e8ff00;
+    --accent2: #00d4ff;
+    --text: #f0f0f0;
+    --text2: #888;
+    --success: #00c97a;
+    --warning: #ff9500;
+    --danger: #ff3b30;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .logo span {
+    color: var(--text2);
+    font-weight: 400;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .btn-config {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 7px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-config:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* CONFIG PANEL */
+  .config-panel {
+    display: none;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px;
+    gap: 16px;
+  }
+
+  .config-panel.open { display: flex; flex-wrap: wrap; align-items: flex-end; }
+
+  .config-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .config-field label {
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .config-field input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: border-color 0.15s;
+  }
+
+  .config-field input:focus {
+    outline: none;
+    border-color: var(--accent2);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  /* TOOLBAR */
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .count-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .count-badge strong {
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 4px;
+  }
+
+  .filter-tab {
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text2);
+    transition: all 0.15s;
+  }
+
+  .filter-tab.active {
+    border-color: var(--border);
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .filter-tab:hover:not(.active) { color: var(--text); }
+
+  .btn-refresh {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 7px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-refresh:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* MAIN */
+  main { padding: 24px 32px; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text2);
+  }
+
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 16px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
+  .empty-state p { font-size: 13px; line-height: 1.6; max-width: 400px; margin: 0 auto; }
+
+  /* PEDIDO CARD */
+  .pedidos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pedido-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .pedido-card:hover { border-color: #3a3a3a; }
+
+  .pedido-card.aprobado { border-left: 3px solid var(--success); }
+  .pedido-card.pendiente { border-left: 3px solid var(--warning); }
+  .pedido-card.rechazado { border-left: 3px solid var(--danger); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .card-header:hover { background: var(--surface2); }
+
+  .card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .pedido-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    min-width: 28px;
+  }
+
+  .pedido-destinatario {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .pedido-empresa {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  .card-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge {
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-pendiente { background: rgba(255,149,0,0.15); color: var(--warning); }
+  .badge-aprobado { background: rgba(0,201,122,0.15); color: var(--success); }
+  .badge-rechazado { background: rgba(255,59,48,0.15); color: var(--danger); }
+
+  .card-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  .card-chevron {
+    font-size: 10px;
+    color: var(--text2);
+    transition: transform 0.2s;
+  }
+
+  .pedido-card.expanded .card-chevron { transform: rotate(180deg); }
+
+  /* CARD BODY */
+  .card-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pedido-card.expanded .card-body { display: block; }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .field-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .field-label {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .field-value {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .field-value:focus {
+    outline: none;
+    border-color: var(--accent2);
+  }
+
+  .field-value[readonly] {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-aprobar {
+    background: var(--success);
+    color: #000;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .btn-aprobar:hover { opacity: 0.85; }
+
+  .btn-rechazar {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-rechazar:hover { background: rgba(255,59,48,0.1); }
+
+  .btn-guardar {
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 9px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-guardar:hover { background: rgba(0,212,255,0.1); }
+
+  .action-msg {
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text2);
+    align-self: center;
+    margin-left: auto;
+  }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s;
+    z-index: 999;
+    max-width: 320px;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .toast.success { border-left: 3px solid var(--success); }
+  .toast.error { border-left: 3px solid var(--danger); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Point Logistics <span>/ Courier Panel</span></div>
+  <div class="header-right">
+    <div class="status-indicator">
+      <div class="dot"></div>
+      <span id="status-text">Sin conectar</span>
+    </div>
+    <button class="btn-config" onclick="toggleConfig()">⚙ Configurar</button>
+  </div>
+</header>
+
+<div class="config-panel" id="config-panel">
+  <div class="config-field">
+    <label>API Key de Google Sheets</label>
+    <input type="password" id="api-key" placeholder="AIza..." />
+  </div>
+  <div class="config-field">
+    <label>ID del Spreadsheet</label>
+    <input type="text" id="sheet-id" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
+  </div>
+  <div class="config-field" style="max-width:160px">
+    <label>Nombre de la hoja</label>
+    <input type="text" id="sheet-name" value="Hoja1" />
+  </div>
+  <button class="btn-primary" onclick="guardarConfig()">Conectar</button>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="count-badge"><strong id="count-total">0</strong> pedidos</div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filtrar('todos', this)">Todos</button>
+      <button class="filter-tab" onclick="filtrar('pendiente', this)">Pendientes</button>
+      <button class="filter-tab" onclick="filtrar('aprobado', this)">Aprobados</button>
+      <button class="filter-tab" onclick="filtrar('rechazado', this)">Rechazados</button>
+    </div>
+  </div>
+  <button class="btn-refresh" onclick="cargarPedidos()">↻ Actualizar</button>
+</div>
+
+<main>
+  <div id="content">
+    <div class="empty-state">
+      <div class="icon">📋</div>
+      <h3>Configurá la conexión</h3>
+      <p>Hacé clic en "Configurar" arriba para conectar tu Google Sheet y ver los pedidos.</p>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────────
+  let config = {
+    apiKey: localStorage.getItem('pl_apiKey') || '',
+    sheetId: localStorage.getItem('pl_sheetId') || '',
+    sheetName: localStorage.getItem('pl_sheetName') || 'Hoja1'
+  };
+
+  let allPedidos = [];
+  let filtroActivo = 'todos';
+
+  // Columnas del sheet (en orden, A=0)
+  const COLS = {
+    fecha: 0, de: 1, asunto: 2,
+    recipient_name: 3, recipient_company: 4, recipient_address: 5,
+    recipient_city: 6, recipient_state: 7, recipient_zip: 8,
+    recipient_country: 9, recipient_phone: 10, weight_kg: 11,
+    description: 12, declared_value: 13, estado: 14, observaciones: 15
+  };
+
+  const LABELS = {
+    fecha: 'Fecha', de: 'De (email)', asunto: 'Asunto',
+    recipient_name: 'Destinatario', recipient_company: 'Empresa',
+    recipient_address: 'Dirección', recipient_city: 'Ciudad',
+    recipient_state: 'Estado/Prov.', recipient_zip: 'Código Postal',
+    recipient_country: 'País (ISO)', recipient_phone: 'Teléfono',
+    weight_kg: 'Peso (kg)', description: 'Descripción',
+    declared_value: 'Valor Declarado', estado: 'Estado', observaciones: 'Observaciones'
+  };
+
+  const READONLY = ['fecha', 'de', 'asunto'];
+
+  // ── INIT ─────────────────────────────────────────────────────
+  window.onload = () => {
+    if (config.apiKey && config.sheetId) {
+      document.getElementById('api-key').value = config.apiKey;
+      document.getElementById('sheet-id').value = config.sheetId;
+      document.getElementById('sheet-name').value = config.sheetName;
+      cargarPedidos();
+    }
+  };
+
+  function toggleConfig() {
+    const p = document.getElementById('config-panel');
+    p.classList.toggle('open');
+  }
+
+  function guardarConfig() {
+    config.apiKey = document.getElementById('api-key').value.trim();
+    config.sheetId = document.getElementById('sheet-id').value.trim();
+    config.sheetName = document.getElementById('sheet-name').value.trim() || 'Hoja1';
+    localStorage.setItem('pl_apiKey', config.apiKey);
+    localStorage.setItem('pl_sheetId', config.sheetId);
+    localStorage.setItem('pl_sheetName', config.sheetName);
+    document.getElementById('config-panel').classList.remove('open');
+    cargarPedidos();
+  }
+
+  // ── LOAD DATA ─────────────────────────────────────────────────
+  async function cargarPedidos() {
+    if (!config.apiKey || !config.sheetId) return;
+
+    document.getElementById('content').innerHTML = `
+      <div class="loading">
+        <div class="spinner"></div><br>Cargando pedidos...
+      </div>`;
+    document.getElementById('status-text').textContent = 'Conectando...';
+
+    const range = encodeURIComponent(`${config.sheetName}!A2:P500`);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}?key=${config.apiKey}`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('status-text').textContent = 'Error de conexión';
+        document.getElementById('content').innerHTML = `
+          <div class="empty-state">
+            <div class="icon">⚠️</div>
+            <h3>Error al conectar</h3>
+            <p>${data.error.message}</p>
+          </div>`;
+        return;
+      }
+
+      const rows = data.values || [];
+      allPedidos = rows.map((row, i) => {
+        const p = {};
+        Object.keys(COLS).forEach(k => { p[k] = row[COLS[k]] || ''; });
+        p._rowIndex = i + 2; // fila real en sheet (1-indexed, saltando header)
+        return p;
+      }).filter(p => p.fecha); // ignorar filas vacías
+
+      document.getElementById('status-text').textContent = `Conectado · ${allPedidos.length} registros`;
+      renderPedidos();
+    } catch (e) {
+      document.getElementById('status-text').textContent = 'Error de red';
+      document.getElementById('content').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">⚠️</div>
+          <h3>No se pudo conectar</h3>
+          <p>Verificá tu API Key y el ID del spreadsheet.</p>
+        </div>`;
+    }
+  }
+
+  // ── RENDER ────────────────────────────────────────────────────
+  function filtrar(tipo, btn) {
+    filtroActivo = tipo;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderPedidos();
+  }
+
+  function renderPedidos() {
+    const lista = filtroActivo === 'todos'
+      ? allPedidos
+      : allPedidos.filter(p => (p.estado || 'pendiente').toLowerCase() === filtroActivo);
+
+    document.getElementById('count-total').textContent = lista.length;
+
+    if (lista.length === 0) {
+      document.getElementById('content').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">✓</div>
+          <h3>Sin pedidos</h3>
+          <p>No hay pedidos en este filtro.</p>
+        </div>`;
+      return;
+    }
+
+    const html = `<div class="pedidos-list">${lista.map((p, i) => renderCard(p, i)).join('')}</div>`;
+    document.getElementById('content').innerHTML = html;
+  }
+
+  function renderCard(p, i) {
+    const estado = (p.estado || 'pendiente').toLowerCase();
+    const fecha = p.fecha ? new Date(p.fecha).toLocaleString('es-AR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+
+    const fields = Object.keys(COLS).map(k => {
+      if (k === 'estado') return '';
+      const ro = READONLY.includes(k) ? 'readonly' : '';
+      return `
+        <div class="field-item">
+          <div class="field-label">${LABELS[k]}</div>
+          <input class="field-value" data-key="${k}" data-row="${p._rowIndex}" value="${escHtml(p[k])}" ${ro} />
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="pedido-card ${estado}" id="card-${p._rowIndex}">
+        <div class="card-header" onclick="toggleCard(${p._rowIndex})">
+          <div class="card-header-left">
+            <div class="pedido-num">#${p._rowIndex - 1}</div>
+            <div>
+              <div class="pedido-destinatario">${escHtml(p.recipient_name || '—')}</div>
+              <div class="pedido-empresa">${escHtml(p.recipient_company || '')} ${p.recipient_city ? '· ' + escHtml(p.recipient_city) : ''}</div>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <span class="badge badge-${estado}">${estado}</span>
+            <span class="card-date">${fecha}</span>
+            <span class="card-chevron">▼</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="fields-grid">${fields}</div>
+          <div class="card-actions">
+            ${estado !== 'aprobado' ? `<button class="btn-aprobar" onclick="cambiarEstado(${p._rowIndex}, 'Aprobado')">✓ Aprobar</button>` : ''}
+            ${estado !== 'rechazado' ? `<button class="btn-rechazar" onclick="cambiarEstado(${p._rowIndex}, 'Rechazado')">✕ Rechazar</button>` : ''}
+            <button class="btn-guardar" onclick="guardarCambios(${p._rowIndex})">↑ Guardar cambios</button>
+            <span class="action-msg" id="msg-${p._rowIndex}"></span>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function toggleCard(rowIndex) {
+    const card = document.getElementById(`card-${rowIndex}`);
+    card.classList.toggle('expanded');
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── WRITE TO SHEET ─────────────────────────────────────────────
+  async function cambiarEstado(rowIndex, nuevoEstado) {
+    const col = String.fromCharCode(65 + COLS.estado); // columna O
+    const range = `${config.sheetName}!${col}${rowIndex}`;
+    await writeCell(range, nuevoEstado, rowIndex);
+    showToast(`Pedido marcado como ${nuevoEstado}`, 'success');
+    cargarPedidos();
+  }
+
+  async function guardarCambios(rowIndex) {
+    const card = document.getElementById(`card-${rowIndex}`);
+    const inputs = card.querySelectorAll('.field-value:not([readonly])');
+    const msg = document.getElementById(`msg-${rowIndex}`);
+
+    msg.textContent = 'Guardando...';
+
+    // Construir array de valores en orden de columnas
+    const vals = Array(Object.keys(COLS).length).fill('');
+    inputs.forEach(inp => {
+      const key = inp.dataset.key;
+      if (COLS[key] !== undefined) vals[COLS[key]] = inp.value;
+    });
+
+    // Rango de la fila completa (columnas editables B en adelante)
+    const startCol = 'A';
+    const endCol = String.fromCharCode(65 + Object.keys(COLS).length - 1);
+    const range = `${config.sheetName}!${startCol}${rowIndex}:${endCol}${rowIndex}`;
+
+    try {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED&key=${config.apiKey}`;
+      // Nota: escritura requiere OAuth, no solo API key
+      // Se necesita integrar con Make.com para escritura
+      msg.textContent = '⚠ Escritura requiere OAuth';
+      showToast('Para guardar cambios necesitás configurar OAuth. Por ahora usá Make.com para actualizar el sheet.', 'error');
+    } catch(e) {
+      msg.textContent = 'Error';
+    }
+  }
+
+  async function writeCell(range, value, rowIndex) {
+    // Escritura directa requiere OAuth2, no API key simple
+    // Esta función se conectará vía Make.com webhook en la próxima fase
+    console.log(`Escribir en ${range}: ${value}`);
+  }
+
+  // ── TOAST ──────────────────────────────────────────────────────
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
