@@ -734,6 +734,8 @@
       const res = await fetch(url);
       const data = await res.json();
       const rows = data.values || [];
+      console.log('Clientes cargados:', rows.length, 'filas');
+      if (rows.length > 0) console.log('Último cliente:', rows[rows.length-1][0]);
       allClientes = rows.map(row => ({
         email: (row[0] || '').toLowerCase().trim(),
         referencia: row[1] || '',
@@ -748,8 +750,8 @@
         producto: row[10] || '',
         valor: row[11] || '',
         horario: row[12] || '',
-        comentarios: row[15] || '',
-        psp: row[16] || ''
+        comentarios: row[14] || '',
+        psp: row[15] || ''
       }));
     } catch(e) {
       allClientes = [];
