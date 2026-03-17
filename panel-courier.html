@@ -337,6 +337,70 @@
 
   .pedido-card.expanded .card-chevron { transform: rotate(180deg); }
 
+  /* SENDER SECTION */
+  .sender-section {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+
+  .sender-section.found { border-color: rgba(0,201,122,0.3); background: rgba(0,201,122,0.05); }
+  .sender-section.notfound { border-color: rgba(255,149,0,0.3); background: rgba(255,149,0,0.05); }
+
+  .sender-label {
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sender-badge {
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    background: rgba(0,201,122,0.2);
+    color: var(--success);
+  }
+
+  .sender-badge.notfound { background: rgba(255,149,0,0.2); color: var(--warning); }
+
+  .sender-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+  }
+
+  .sender-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sender-field.full { grid-column: 1 / -1; }
+
+  .sender-field span {
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .sender-field small {
+    font-size: 10px;
+    color: var(--text2);
+    font-family: 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+  }
+
+  .sender-missing {
+    font-size: 13px;
+    color: var(--warning);
+  }
+
   /* CARD BODY */
   .card-body {
     display: none;
@@ -562,6 +626,7 @@
   };
 
   let allPedidos = [];
+  let allClientes = [];
   let filtroActivo = 'todos';
 
   // Columnas del sheet (en orden, A=0)
@@ -648,6 +713,7 @@
       }).filter(p => p.fecha); // ignorar filas vacías
 
       document.getElementById('status-text').textContent = `Conectado · ${allPedidos.length} registros`;
+      await cargarClientes();
       renderPedidos();
     } catch (e) {
       document.getElementById('status-text').textContent = 'Error de red';
@@ -658,6 +724,40 @@
           <p>Verificá tu API Key y el ID del spreadsheet.</p>
         </div>`;
     }
+  }
+
+  // ── CLIENTES ──────────────────────────────────────────────────
+  async function cargarClientes() {
+    const range = encodeURIComponent(`Clientes!A2:P200`);
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}?key=${config.apiKey}`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const rows = data.values || [];
+      allClientes = rows.map(row => ({
+        email: (row[0] || '').toLowerCase().trim(),
+        referencia: row[1] || '',
+        razon_social: row[2] || '',
+        empresa: row[3] || '',
+        cuit: row[4] || '',
+        telefono: row[5] || '',
+        direccion: row[7] || '',
+        cp: row[8] || '',
+        ciudad: row[9] || '',
+        pais: row[10] || 'AR',
+        producto: row[11] || '',
+        horario: row[13] || '',
+        comentarios: row[15] || '',
+        psp: row[16] || ''
+      }));
+    } catch(e) {
+      allClientes = [];
+    }
+  }
+
+  function buscarCliente(email) {
+    if (!email) return null;
+    return allClientes.find(c => c.email === email.toLowerCase().trim()) || null;
   }
 
   // ── RENDER ────────────────────────────────────────────────────
@@ -703,6 +803,31 @@
         </div>`;
     }).join('');
 
+    // Buscar cliente remitente por email
+    const cliente = buscarCliente(p.de);
+    let senderHtml = '';
+    if (cliente) {
+      senderHtml = `
+        <div class="sender-section found">
+          <div class="sender-label">REMITENTE <span class="sender-badge">✓ Encontrado</span></div>
+          <div class="sender-grid">
+            <div class="sender-field"><span>${escHtml(cliente.razon_social)}</span><small>Razón Social</small></div>
+            <div class="sender-field"><span>${escHtml(cliente.empresa)}</span><small>Empresa</small></div>
+            <div class="sender-field"><span>${escHtml(String(cliente.telefono))}</span><small>Teléfono</small></div>
+            <div class="sender-field"><span>${escHtml(cliente.direccion)}</span><small>Dirección</small></div>
+            <div class="sender-field"><span>${escHtml(cliente.ciudad)} ${escHtml(cliente.cp)}</span><small>Ciudad / CP</small></div>
+            <div class="sender-field"><span>${escHtml(cliente.cuit)}</span><small>CUIT/CUIL</small></div>
+            ${cliente.comentarios ? `<div class="sender-field full"><span>${escHtml(cliente.comentarios)}</span><small>Comentarios</small></div>` : ''}
+          </div>
+        </div>`;
+    } else {
+      senderHtml = `
+        <div class="sender-section notfound">
+          <div class="sender-label">REMITENTE <span class="sender-badge notfound">⚠ No encontrado</span></div>
+          <p class="sender-missing">El email <strong>${escHtml(p.de)}</strong> no está en la base de clientes. Verificá manualmente o agregá el cliente.</p>
+        </div>`;
+    }
+
     return `
       <div class="pedido-card ${estado}" id="card-${p._rowIndex}">
         <div class="card-header" onclick="toggleCard(${p._rowIndex})">
@@ -720,6 +845,7 @@
           </div>
         </div>
         <div class="card-body">
+          ${senderHtml}
           <div class="fields-grid">${fields}</div>
           <div class="card-actions">
             ${estado !== 'aprobado' ? `<button class="btn-aprobar" onclick="cambiarEstado(${p._rowIndex}, 'Aprobado')">✓ Aprobar</button>` : ''}
