@@ -740,13 +740,25 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  // ── WEBHOOK URL ────────────────────────────────────────────────
+  const WEBHOOK_URL = 'https://hook.us2.make.com/oc3fv41k4pnqgg1ekkj8hpw1ijuac3gn';
+
   // ── WRITE TO SHEET ─────────────────────────────────────────────
   async function cambiarEstado(rowIndex, nuevoEstado) {
-    const col = String.fromCharCode(65 + COLS.estado); // columna O
-    const range = `${config.sheetName}!${col}${rowIndex}`;
-    await writeCell(range, nuevoEstado, rowIndex);
-    showToast(`Pedido marcado como ${nuevoEstado}`, 'success');
-    cargarPedidos();
+    const msg = document.getElementById(`msg-${rowIndex}`);
+    msg.textContent = 'Actualizando...';
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rowIndex: rowIndex, estado: nuevoEstado })
+      });
+      showToast(`Pedido marcado como ${nuevoEstado} ✓`, 'success');
+      setTimeout(() => cargarPedidos(), 1500);
+    } catch(e) {
+      msg.textContent = 'Error';
+      showToast('No se pudo actualizar el estado', 'error');
+    }
   }
 
   async function guardarCambios(rowIndex) {
@@ -756,33 +768,27 @@
 
     msg.textContent = 'Guardando...';
 
-    // Construir array de valores en orden de columnas
-    const vals = Array(Object.keys(COLS).length).fill('');
+    const datos = { rowIndex: rowIndex };
     inputs.forEach(inp => {
-      const key = inp.dataset.key;
-      if (COLS[key] !== undefined) vals[COLS[key]] = inp.value;
+      datos[inp.dataset.key] = inp.value;
     });
-
-    // Rango de la fila completa (columnas editables B en adelante)
-    const startCol = 'A';
-    const endCol = String.fromCharCode(65 + Object.keys(COLS).length - 1);
-    const range = `${config.sheetName}!${startCol}${rowIndex}:${endCol}${rowIndex}`;
+    // Mantener estado actual
+    const estadoInput = card.querySelector('[data-key="estado"]');
+    if (!estadoInput) datos.estado = '';
 
     try {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${encodeURIComponent(range)}?valueInputOption=USER_ENTERED&key=${config.apiKey}`;
-      // Nota: escritura requiere OAuth, no solo API key
-      // Se necesita integrar con Make.com para escritura
-      msg.textContent = '⚠ Escritura requiere OAuth';
-      showToast('Para guardar cambios necesitás configurar OAuth. Por ahora usá Make.com para actualizar el sheet.', 'error');
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+      msg.textContent = '✓ Guardado';
+      showToast('Cambios guardados', 'success');
+      setTimeout(() => cargarPedidos(), 1500);
     } catch(e) {
       msg.textContent = 'Error';
+      showToast('No se pudo guardar', 'error');
     }
-  }
-
-  async function writeCell(range, value, rowIndex) {
-    // Escritura directa requiere OAuth2, no API key simple
-    // Esta función se conectará vía Make.com webhook en la próxima fase
-    console.log(`Escribir en ${range}: ${value}`);
   }
 
   // ── TOAST ──────────────────────────────────────────────────────
