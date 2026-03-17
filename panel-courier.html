@@ -728,7 +728,7 @@
 
   // ── CLIENTES ──────────────────────────────────────────────────
   async function cargarClientes() {
-    const range = encodeURIComponent(`Clientes!A2:P200`);
+    const range = encodeURIComponent(`Clientes!A2:Q200`);
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}?key=${config.apiKey}`;
     try {
       const res = await fetch(url);
@@ -741,12 +741,13 @@
         empresa: row[3] || '',
         cuit: row[4] || '',
         telefono: row[5] || '',
-        direccion: row[7] || '',
-        cp: row[8] || '',
-        ciudad: row[9] || '',
-        pais: row[10] || 'AR',
-        producto: row[11] || '',
-        horario: row[13] || '',
+        direccion: row[6] || '',
+        cp: row[7] || '',
+        ciudad: row[8] || '',
+        pais: row[9] || 'AR',
+        producto: row[10] || '',
+        valor: row[11] || '',
+        horario: row[12] || '',
         comentarios: row[15] || '',
         psp: row[16] || ''
       }));
