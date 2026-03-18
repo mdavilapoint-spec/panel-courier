@@ -906,11 +906,13 @@
     if (!estadoInput) datos.estado = '';
 
     try {
-      await fetch(WEBHOOK_URL, {
+      console.log('Enviando al webhook:', JSON.stringify(datos));
+      const res = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
       });
+      console.log('Respuesta webhook:', res.status);
       msg.textContent = '✓ Guardado';
       showToast('Cambios guardados', 'success');
       setTimeout(() => cargarPedidos(), 1500);
