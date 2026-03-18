@@ -728,7 +728,7 @@
 
   // ── CLIENTES ──────────────────────────────────────────────────
   async function cargarClientes() {
-    const range = encodeURIComponent(`Clientes!A2:Q200`);
+    const range = encodeURIComponent(`Clientes!A2:P200`);
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}?key=${config.apiKey}`;
     try {
       const res = await fetch(url);
