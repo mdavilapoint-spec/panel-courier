@@ -909,9 +909,9 @@
       console.log('Enviando al webhook:', JSON.stringify(datos));
       const res = await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-      });
+mode: 'no-cors',
+headers: { 'Content-Type': 'text/plain' },
+body: JSON.stringify(datos)
       console.log('Respuesta webhook:', res.status);
       msg.textContent = '✓ Guardado';
       showToast('Cambios guardados', 'success');
