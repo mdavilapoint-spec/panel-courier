@@ -708,9 +708,9 @@
       allPedidos = rows.map((row, i) => {
         const p = {};
         Object.keys(COLS).forEach(k => { p[k] = row[COLS[k]] || ''; });
-        p._rowIndex = i + 2; // fila real en sheet (1-indexed, saltando header)
+        p._rowIndex = i + 2;
         return p;
-      }).filter(p => p.fecha); // ignorar filas vacías
+      }).filter(p => p.fecha);
 
       document.getElementById('status-text').textContent = `Conectado · ${allPedidos.length} registros`;
       await cargarClientes();
@@ -806,7 +806,6 @@
         </div>`;
     }).join('');
 
-    // Buscar cliente remitente por email
     const cliente = buscarCliente(p.de);
     let senderHtml = '';
     if (cliente) {
@@ -827,7 +826,7 @@
       senderHtml = `
         <div class="sender-section notfound">
           <div class="sender-label">REMITENTE <span class="sender-badge notfound">⚠ No encontrado</span></div>
-          <p class="sender-missing">El email <strong>${escHtml(p.de)}</strong> no está en la base de clientes. Verificá manualmente o agregá el cliente.</p>
+          <p class="sender-missing">El email <strong>${escHtml(p.de)}</strong> no está en la base de clientes.</p>
         </div>`;
     }
 
@@ -879,7 +878,8 @@
     try {
       await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ rowIndex: rowIndex, estado: nuevoEstado })
       });
       showToast(`Pedido marcado como ${nuevoEstado} ✓`, 'success');
@@ -901,18 +901,18 @@
     inputs.forEach(inp => {
       datos[inp.dataset.key] = inp.value;
     });
-    // Mantener estado actual
+
     const estadoInput = card.querySelector('[data-key="estado"]');
     if (!estadoInput) datos.estado = '';
 
     try {
       console.log('Enviando al webhook:', JSON.stringify(datos));
-      const res = await fetch(WEBHOOK_URL, {
+      await fetch(WEBHOOK_URL, {
         method: 'POST',
-mode: 'no-cors',
-headers: { 'Content-Type': 'text/plain' },
-body: JSON.stringify(datos)
-      console.log('Respuesta webhook:', res.status);
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(datos)
+      });
       msg.textContent = '✓ Guardado';
       showToast('Cambios guardados', 'success');
       setTimeout(() => cargarPedidos(), 1500);
