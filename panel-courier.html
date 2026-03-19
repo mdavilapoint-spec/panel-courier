@@ -30,7 +30,6 @@
     min-height: 100vh;
   }
 
-  /* HEADER */
   header {
     display: flex;
     align-items: center;
@@ -52,16 +51,8 @@
     color: var(--accent);
   }
 
-  .logo span {
-    color: var(--text2);
-    font-weight: 400;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
+  .logo span { color: var(--text2); font-weight: 400; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
 
   .status-indicator {
     display: flex;
@@ -73,17 +64,13 @@
   }
 
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--success);
     animation: pulse 2s infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
   .btn-config {
     background: transparent;
@@ -97,12 +84,8 @@
     transition: all 0.15s;
   }
 
-  .btn-config:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  .btn-config:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* CONFIG PANEL */
   .config-panel {
     display: none;
     background: var(--surface);
@@ -113,13 +96,7 @@
 
   .config-panel.open { display: flex; flex-wrap: wrap; align-items: flex-end; }
 
-  .config-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 260px;
-  }
+  .config-field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 260px; }
 
   .config-field label {
     font-size: 11px;
@@ -140,10 +117,7 @@
     transition: border-color 0.15s;
   }
 
-  .config-field input:focus {
-    outline: none;
-    border-color: var(--accent2);
-  }
+  .config-field input:focus { outline: none; border-color: var(--accent2); }
 
   .btn-primary {
     background: var(--accent);
@@ -161,7 +135,6 @@
 
   .btn-primary:hover { opacity: 0.85; }
 
-  /* TOOLBAR */
   .toolbar {
     display: flex;
     align-items: center;
@@ -170,28 +143,11 @@
     border-bottom: 1px solid var(--border);
   }
 
-  .toolbar-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .toolbar-left { display: flex; align-items: center; gap: 12px; }
+  .count-badge { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text2); }
+  .count-badge strong { color: var(--accent); font-size: 18px; font-weight: 600; }
 
-  .count-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--text2);
-  }
-
-  .count-badge strong {
-    color: var(--accent);
-    font-size: 18px;
-    font-weight: 600;
-  }
-
-  .filter-tabs {
-    display: flex;
-    gap: 4px;
-  }
+  .filter-tabs { display: flex; gap: 4px; }
 
   .filter-tab {
     padding: 6px 14px;
@@ -205,13 +161,10 @@
     transition: all 0.15s;
   }
 
-  .filter-tab.active {
-    border-color: var(--border);
-    background: var(--surface2);
-    color: var(--text);
-  }
-
+  .filter-tab.active { border-color: var(--border); background: var(--surface2); color: var(--text); }
   .filter-tab:hover:not(.active) { color: var(--text); }
+
+  .toolbar-right { display: flex; gap: 8px; align-items: center; }
 
   .btn-refresh {
     background: transparent;
@@ -228,31 +181,31 @@
     gap: 6px;
   }
 
-  .btn-refresh:hover {
-    border-color: var(--accent2);
-    color: var(--accent2);
+  .btn-refresh:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .btn-export {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
   }
 
-  /* MAIN */
+  .btn-export:hover { opacity: 0.85; }
+
   main { padding: 24px 32px; }
 
-  /* EMPTY STATE */
-  .empty-state {
-    text-align: center;
-    padding: 80px 20px;
-    color: var(--text2);
-  }
-
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--text2); }
   .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
   .empty-state h3 { font-size: 16px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
   .empty-state p { font-size: 13px; line-height: 1.6; max-width: 400px; margin: 0 auto; }
 
-  /* PEDIDO CARD */
-  .pedidos-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+  .pedidos-list { display: flex; flex-direction: column; gap: 12px; }
 
   .pedido-card {
     background: var(--surface);
@@ -263,7 +216,6 @@
   }
 
   .pedido-card:hover { border-color: #3a3a3a; }
-
   .pedido-card.aprobado { border-left: 3px solid var(--success); }
   .pedido-card.pendiente { border-left: 3px solid var(--warning); }
   .pedido-card.rechazado { border-left: 3px solid var(--danger); }
@@ -278,36 +230,11 @@
   }
 
   .card-header:hover { background: var(--surface2); }
-
-  .card-header-left {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .pedido-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--text2);
-    min-width: 28px;
-  }
-
-  .pedido-destinatario {
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .pedido-empresa {
-    font-size: 12px;
-    color: var(--text2);
-    margin-top: 2px;
-  }
-
-  .card-header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .card-header-left { display: flex; align-items: center; gap: 16px; }
+  .pedido-num { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text2); min-width: 28px; }
+  .pedido-destinatario { font-size: 14px; font-weight: 500; }
+  .pedido-empresa { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .card-header-right { display: flex; align-items: center; gap: 12px; }
 
   .badge {
     padding: 3px 10px;
@@ -323,28 +250,11 @@
   .badge-aprobado { background: rgba(0,201,122,0.15); color: var(--success); }
   .badge-rechazado { background: rgba(255,59,48,0.15); color: var(--danger); }
 
-  .card-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--text2);
-  }
-
-  .card-chevron {
-    font-size: 10px;
-    color: var(--text2);
-    transition: transform 0.2s;
-  }
-
+  .card-date { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text2); }
+  .card-chevron { font-size: 10px; color: var(--text2); transition: transform 0.2s; }
   .pedido-card.expanded .card-chevron { transform: rotate(180deg); }
 
-  /* SENDER SECTION */
-  .sender-section {
-    margin-top: 16px;
-    padding: 14px 16px;
-    border-radius: 5px;
-    border: 1px solid var(--border);
-  }
-
+  .sender-section { margin-top: 16px; padding: 14px 16px; border-radius: 5px; border: 1px solid var(--border); }
   .sender-section.found { border-color: rgba(0,201,122,0.3); background: rgba(0,201,122,0.05); }
   .sender-section.notfound { border-color: rgba(255,149,0,0.3); background: rgba(255,149,0,0.05); }
 
@@ -360,76 +270,21 @@
     gap: 8px;
   }
 
-  .sender-badge {
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 10px;
-    background: rgba(0,201,122,0.2);
-    color: var(--success);
-  }
-
+  .sender-badge { padding: 2px 8px; border-radius: 3px; font-size: 10px; background: rgba(0,201,122,0.2); color: var(--success); }
   .sender-badge.notfound { background: rgba(255,149,0,0.2); color: var(--warning); }
-
-  .sender-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 10px;
-  }
-
-  .sender-field {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
+  .sender-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .sender-field { display: flex; flex-direction: column; gap: 2px; }
   .sender-field.full { grid-column: 1 / -1; }
+  .sender-field span { font-size: 13px; color: var(--text); }
+  .sender-field small { font-size: 10px; color: var(--text2); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
+  .sender-missing { font-size: 13px; color: var(--warning); }
 
-  .sender-field span {
-    font-size: 13px;
-    color: var(--text);
-  }
-
-  .sender-field small {
-    font-size: 10px;
-    color: var(--text2);
-    font-family: 'IBM Plex Mono', monospace;
-    text-transform: uppercase;
-  }
-
-  .sender-missing {
-    font-size: 13px;
-    color: var(--warning);
-  }
-
-  /* CARD BODY */
-  .card-body {
-    display: none;
-    padding: 0 20px 20px;
-    border-top: 1px solid var(--border);
-  }
-
+  .card-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
   .pedido-card.expanded .card-body { display: block; }
 
-  .fields-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-  }
-
-  .field-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .field-label {
-    font-size: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
+  .fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+  .field-item { display: flex; flex-direction: column; gap: 4px; }
+  .field-label { font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text2); text-transform: uppercase; letter-spacing: 0.1em; }
 
   .field-value {
     background: var(--bg);
@@ -443,15 +298,42 @@
     width: 100%;
   }
 
-  .field-value:focus {
-    outline: none;
-    border-color: var(--accent2);
+  .field-value:focus { outline: none; border-color: var(--accent2); }
+  .field-value[readonly] { opacity: 0.5; cursor: default; }
+
+  .servicio-row {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(232,255,0,0.04);
+    border: 1px solid rgba(232,255,0,0.15);
+    border-radius: 5px;
   }
 
-  .field-value[readonly] {
-    opacity: 0.5;
-    cursor: default;
+  .servicio-row label {
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
   }
+
+  .servicio-select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer;
+  }
+
+  .servicio-select:focus { outline: none; border-color: var(--accent); }
+  .servicio-hint { font-size: 11px; color: var(--text2); font-family: 'IBM Plex Mono', monospace; }
 
   .card-actions {
     display: flex;
@@ -462,103 +344,54 @@
   }
 
   .btn-aprobar {
-    background: var(--success);
-    color: #000;
-    border: none;
-    padding: 9px 20px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.15s;
+    background: var(--success); color: #000; border: none;
+    padding: 9px 20px; border-radius: 4px; font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s;
   }
 
   .btn-aprobar:hover { opacity: 0.85; }
 
   .btn-rechazar {
-    background: transparent;
-    color: var(--danger);
-    border: 1px solid var(--danger);
-    padding: 9px 20px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
+    background: transparent; color: var(--danger); border: 1px solid var(--danger);
+    padding: 9px 20px; border-radius: 4px; font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
   }
 
   .btn-rechazar:hover { background: rgba(255,59,48,0.1); }
 
   .btn-guardar {
-    background: transparent;
-    color: var(--accent2);
-    border: 1px solid var(--accent2);
-    padding: 9px 20px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
+    background: transparent; color: var(--accent2); border: 1px solid var(--accent2);
+    padding: 9px 20px; border-radius: 4px; font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
   }
 
   .btn-guardar:hover { background: rgba(0,212,255,0.1); }
 
-  .action-msg {
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--text2);
-    align-self: center;
-    margin-left: auto;
-  }
+  .action-msg { font-size: 12px; font-family: 'IBM Plex Mono', monospace; color: var(--text2); align-self: center; margin-left: auto; }
 
-  /* LOADING */
-  .loading {
-    text-align: center;
-    padding: 60px;
-    color: var(--text2);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13px;
-  }
+  .loading { text-align: center; padding: 60px; color: var(--text2); font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
 
   .spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-bottom: 12px;
+    display: inline-block; width: 20px; height: 20px;
+    border: 2px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* TOAST */
   .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-family: 'IBM Plex Mono', monospace;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.25s;
-    z-index: 999;
-    max-width: 320px;
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 12px 20px; border-radius: 6px; font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace; opacity: 0;
+    transform: translateY(10px); transition: all 0.25s;
+    z-index: 999; max-width: 320px;
   }
 
-  .toast.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
+  .toast.show { opacity: 1; transform: translateY(0); }
   .toast.success { border-left: 3px solid var(--success); }
   .toast.error { border-left: 3px solid var(--danger); }
 </style>
@@ -602,7 +435,10 @@
       <button class="filter-tab" onclick="filtrar('rechazado', this)">Rechazados</button>
     </div>
   </div>
-  <button class="btn-refresh" onclick="cargarPedidos()">↻ Actualizar</button>
+  <div class="toolbar-right">
+    <button class="btn-refresh" onclick="cargarPedidos()">↻ Actualizar</button>
+    <button class="btn-export" onclick="exportarCSV()">↓ Exportar CSV FedEx</button>
+  </div>
 </div>
 
 <main>
@@ -618,7 +454,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────────
   let config = {
     apiKey: localStorage.getItem('pl_apiKey') || '',
     sheetId: localStorage.getItem('pl_sheetId') || '',
@@ -628,8 +463,8 @@
   let allPedidos = [];
   let allClientes = [];
   let filtroActivo = 'todos';
+  const serviciosPorPedido = {};
 
-  // Columnas del sheet (en orden, A=0)
   const COLS = {
     fecha: 0, de: 1, asunto: 2,
     recipient_name: 3, recipient_company: 4, recipient_address: 5,
@@ -650,7 +485,6 @@
 
   const READONLY = ['fecha', 'de', 'asunto'];
 
-  // ── INIT ─────────────────────────────────────────────────────
   window.onload = () => {
     if (config.apiKey && config.sheetId) {
       document.getElementById('api-key').value = config.apiKey;
@@ -661,8 +495,7 @@
   };
 
   function toggleConfig() {
-    const p = document.getElementById('config-panel');
-    p.classList.toggle('open');
+    document.getElementById('config-panel').classList.toggle('open');
   }
 
   function guardarConfig() {
@@ -676,14 +509,9 @@
     cargarPedidos();
   }
 
-  // ── LOAD DATA ─────────────────────────────────────────────────
   async function cargarPedidos() {
     if (!config.apiKey || !config.sheetId) return;
-
-    document.getElementById('content').innerHTML = `
-      <div class="loading">
-        <div class="spinner"></div><br>Cargando pedidos...
-      </div>`;
+    document.getElementById('content').innerHTML = `<div class="loading"><div class="spinner"></div><br>Cargando pedidos...</div>`;
     document.getElementById('status-text').textContent = 'Conectando...';
 
     const range = encodeURIComponent(`${config.sheetName}!A2:P500`);
@@ -695,12 +523,7 @@
 
       if (data.error) {
         document.getElementById('status-text').textContent = 'Error de conexión';
-        document.getElementById('content').innerHTML = `
-          <div class="empty-state">
-            <div class="icon">⚠️</div>
-            <h3>Error al conectar</h3>
-            <p>${data.error.message}</p>
-          </div>`;
+        document.getElementById('content').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><h3>Error al conectar</h3><p>${data.error.message}</p></div>`;
         return;
       }
 
@@ -717,16 +540,10 @@
       renderPedidos();
     } catch (e) {
       document.getElementById('status-text').textContent = 'Error de red';
-      document.getElementById('content').innerHTML = `
-        <div class="empty-state">
-          <div class="icon">⚠️</div>
-          <h3>No se pudo conectar</h3>
-          <p>Verificá tu API Key y el ID del spreadsheet.</p>
-        </div>`;
+      document.getElementById('content').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><h3>No se pudo conectar</h3><p>Verificá tu API Key y el ID del spreadsheet.</p></div>`;
     }
   }
 
-  // ── CLIENTES ──────────────────────────────────────────────────
   async function cargarClientes() {
     const range = encodeURIComponent(`Clientes!A2:P200`);
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}?key=${config.apiKey}`;
@@ -763,7 +580,6 @@
     return allClientes.find(c => c.email === email.toLowerCase().trim()) || null;
   }
 
-  // ── RENDER ────────────────────────────────────────────────────
   function filtrar(tipo, btn) {
     filtroActivo = tipo;
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -779,17 +595,11 @@
     document.getElementById('count-total').textContent = lista.length;
 
     if (lista.length === 0) {
-      document.getElementById('content').innerHTML = `
-        <div class="empty-state">
-          <div class="icon">✓</div>
-          <h3>Sin pedidos</h3>
-          <p>No hay pedidos en este filtro.</p>
-        </div>`;
+      document.getElementById('content').innerHTML = `<div class="empty-state"><div class="icon">✓</div><h3>Sin pedidos</h3><p>No hay pedidos en este filtro.</p></div>`;
       return;
     }
 
-    const html = `<div class="pedidos-list">${lista.map((p, i) => renderCard(p, i)).join('')}</div>`;
-    document.getElementById('content').innerHTML = html;
+    document.getElementById('content').innerHTML = `<div class="pedidos-list">${lista.map((p, i) => renderCard(p, i)).join('')}</div>`;
   }
 
   function renderCard(p, i) {
@@ -830,6 +640,18 @@
         </div>`;
     }
 
+    const servicioActual = serviciosPorPedido[p._rowIndex] || '';
+    const servicioRow = estado === 'aprobado' ? `
+      <div class="servicio-row">
+        <label>Servicio FedEx</label>
+        <select class="servicio-select" id="servicio-${p._rowIndex}" onchange="serviciosPorPedido[${p._rowIndex}] = this.value">
+          <option value="" ${servicioActual === '' ? 'selected' : ''}>— Elegir —</option>
+          <option value="INTERNATIONAL_PRIORITY" ${servicioActual === 'INTERNATIONAL_PRIORITY' ? 'selected' : ''}>International Priority (IP)</option>
+          <option value="INTERNATIONAL_ECONOMY" ${servicioActual === 'INTERNATIONAL_ECONOMY' ? 'selected' : ''}>International Economy (IE)</option>
+        </select>
+        <span class="servicio-hint">Requerido para exportar CSV</span>
+      </div>` : '';
+
     return `
       <div class="pedido-card ${estado}" id="card-${p._rowIndex}">
         <div class="card-header" onclick="toggleCard(${p._rowIndex})">
@@ -849,6 +671,7 @@
         <div class="card-body">
           ${senderHtml}
           <div class="fields-grid">${fields}</div>
+          ${servicioRow}
           <div class="card-actions">
             ${estado !== 'aprobado' ? `<button class="btn-aprobar" onclick="cambiarEstado(${p._rowIndex}, 'Aprobado')">✓ Aprobar</button>` : ''}
             ${estado !== 'rechazado' ? `<button class="btn-rechazar" onclick="cambiarEstado(${p._rowIndex}, 'Rechazado')">✕ Rechazar</button>` : ''}
@@ -860,18 +683,73 @@
   }
 
   function toggleCard(rowIndex) {
-    const card = document.getElementById(`card-${rowIndex}`);
-    card.classList.toggle('expanded');
+    document.getElementById(`card-${rowIndex}`).classList.toggle('expanded');
   }
 
   function escHtml(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ── WEBHOOK URL ────────────────────────────────────────────────
+  // ── EXPORTAR CSV FEDEX ────────────────────────────────────────
+  function exportarCSV() {
+    const aprobados = allPedidos.filter(p => (p.estado || '').toLowerCase() === 'aprobado');
+
+    if (aprobados.length === 0) {
+      showToast('No hay pedidos aprobados para exportar', 'error');
+      return;
+    }
+
+    const sinServicio = aprobados.filter(p => !serviciosPorPedido[p._rowIndex]);
+    if (sinServicio.length > 0) {
+      showToast(`${sinServicio.length} pedido(s) sin servicio FedEx elegido. Abrí cada uno y seleccioná IP o IE.`, 'error');
+      return;
+    }
+
+    const headers = [
+      'RecipientName', 'CompanyName', 'Address1', 'City',
+      'StateOrProvinceCode', 'PostalCode', 'CountryCode', 'PhoneNumber',
+      'WeightUnits', 'Weight', 'ServiceType', 'PackagingType',
+      'DeclaredValue', 'CurrencyCode', 'CommodityDescription', 'Reference'
+    ];
+
+    const rows = aprobados.map(p => [
+      csvCell(p.recipient_name),
+      csvCell(p.recipient_company),
+      csvCell(p.recipient_address),
+      csvCell(p.recipient_city),
+      csvCell(p.recipient_state),
+      csvCell(p.recipient_zip),
+      csvCell(p.recipient_country || 'US'),
+      csvCell(p.recipient_phone),
+      'KG',
+      csvCell(p.weight_kg),
+      csvCell(serviciosPorPedido[p._rowIndex]),
+      'YOUR_PACKAGING',
+      csvCell(p.declared_value),
+      'USD',
+      csvCell(p.description),
+      csvCell(p.asunto || `Pedido #${p._rowIndex - 1}`)
+    ]);
+
+    const csvContent = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fedex_envios_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(`CSV exportado · ${aprobados.length} envío(s)`, 'success');
+  }
+
+  function csvCell(val) {
+    return `"${String(val || '').replace(/"/g, '""')}"`;
+  }
+
+  // ── WEBHOOK ───────────────────────────────────────────────────
   const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwJPltqf9slxIqtWuLpOR9qOO77md6dxPsfYTUfnPRCwNJ3sgd1w_uxnbILHn14ToAOhg/exec';
 
-  // ── WRITE TO SHEET ─────────────────────────────────────────────
   async function cambiarEstado(rowIndex, nuevoEstado) {
     const msg = document.getElementById(`msg-${rowIndex}`);
     msg.textContent = 'Actualizando...';
@@ -894,14 +772,10 @@
     const card = document.getElementById(`card-${rowIndex}`);
     const inputs = card.querySelectorAll('.field-value:not([readonly])');
     const msg = document.getElementById(`msg-${rowIndex}`);
-
     msg.textContent = 'Guardando...';
 
     const datos = { rowIndex: rowIndex };
-    inputs.forEach(inp => {
-      datos[inp.dataset.key] = inp.value;
-    });
-
+    inputs.forEach(inp => { datos[inp.dataset.key] = inp.value; });
     const estadoInput = card.querySelector('[data-key="estado"]');
     if (!estadoInput) datos.estado = '';
 
@@ -922,7 +796,6 @@
     }
   }
 
-  // ── TOAST ──────────────────────────────────────────────────────
   function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
     t.textContent = msg;
